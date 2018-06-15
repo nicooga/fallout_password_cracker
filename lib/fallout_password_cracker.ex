@@ -1,0 +1,2 @@
+defmodule FalloutPasswordCracker do
+end
