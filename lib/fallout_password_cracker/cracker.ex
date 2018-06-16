@@ -1,6 +1,9 @@
 defmodule FalloutPasswordCracker.Cracker do
   @moduledoc "Service for cracking passwords. Holds a list of words that can be updated."
 
+  @doc "Starts the server"
+  def start_link, do: GenServer.start_link(__MODULE__.Server, [])
+
   @doc "Returns the current words"
   def words, do: call(:words)
 

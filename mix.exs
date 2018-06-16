@@ -7,7 +7,8 @@ defmodule FalloutPasswordCracker.MixProject do
     elixir: "~> 1.6",
     start_permanent: Mix.env() == :prod,
     deps: deps(),
-    elixirc_paths: elixirc_paths()
+    elixirc_paths: elixirc_paths(),
+    escript: escript()
   ]
 
   def application, do: [
@@ -16,18 +17,23 @@ defmodule FalloutPasswordCracker.MixProject do
   ]
 
   # Extra applications by env
-  def extra_applications, do: extra_applications(:base) ++ extra_applications(Mix.env)
-  def extra_applications(:base), do: ~w[logger]a
-  def extra_applications(:dev), do: ~w[remix]a
-  def extra_applications(_env), do: []
+  defp extra_applications, do: extra_applications(:base) ++ extra_applications(Mix.env)
+  defp extra_applications(:base), do: ~w[logger]a
+  defp extra_applications(:dev), do: ~w[remix]a
+  defp extra_applications(_env), do: []
 
   # Extra load paths by env
-  def elixirc_paths, do: elixirc_paths(:base) ++ elixirc_paths(Mix.env)
-  def elixirc_paths(:base), do: ~w[lib]
-  def elixirc_paths(:test), do: ~w[test/support]
-  def elixirc_paths(_env), do: []
+  defp elixirc_paths, do: elixirc_paths(:base) ++ elixirc_paths(Mix.env)
+  defp elixirc_paths(:base), do: ~w[lib]
+  defp elixirc_paths(:test), do: ~w[test/support]
+  defp elixirc_paths(_env), do: []
 
   defp deps, do: [
     {:remix, "~> 0.0.1", only: :dev} # Reloads code on console automatically
+  ]
+
+  defp escript, do: [
+    main_module: FalloutPasswordCracker.CLI,
+    path: "bin/fallout_password_cracker"
   ]
 end
