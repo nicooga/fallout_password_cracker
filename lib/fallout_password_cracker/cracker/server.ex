@@ -5,11 +5,16 @@ defmodule FalloutPasswordCracker.Cracker.Server do
 
   defdelegate str_length(str), to: String, as: :length
 
+  @initial_state %{words: MapSet.new, clues: %{}, word_length: nil}
+
   def start_link, do: GenServer.start_link(__MODULE__, [], name: __MODULE__)
-  def init([]), do: {:ok, %{words: MapSet.new, clues: %{}, word_length: nil}}
+  def init([]), do: {:ok, @initial_state}
 
   @doc "Returns the current words the cracker is working with"
   def handle_call(:words, _from, state), do: {:reply, state.words, state}
+
+  @doc "Returns the current clues in the cracker"
+  def handle_call(:clues, _from, state), do: {:reply, state.clues, state}
 
   @doc "Sets the entire list of words again. Clues are emptied"
   def handle_call({:set_words, words}, _from, state) when is_list(words) do
@@ -38,6 +43,9 @@ defmodule FalloutPasswordCracker.Cracker.Server do
 
   @doc "Performs a guess about which would be the password"
   def handle_call(:guess, _from, state), do: {:reply, Impl.guess(state.words, state.clues), state}
+
+  @doc "Resets words and clues"
+  def handle_call(:reset, _from, _state), do: {:reply, :ok, @initial_state}
 
   # Words must be all the same length.
   defp valid_word?(word, state), do: state.word_length && str_length(word) != state.word_length

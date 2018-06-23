@@ -7,6 +7,9 @@ defmodule FalloutPasswordCracker.Cracker do
   @doc "Returns the current words"
   def words, do: call(:words)
 
+  @doc "Returns the current clues"
+  def clues, do: call(:clues)
+
   @doc "Adds a single word"
   def add_word(word), do: call({:add_word, word})
 

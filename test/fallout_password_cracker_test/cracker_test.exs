@@ -3,14 +3,12 @@ defmodule FalloutPasswordCrackerTest.CrackerTest do
   doctest FalloutPasswordCracker.Cracker
   alias FalloutPasswordCracker.Cracker
 
-  @moduletag timeout: 1923123123
-
   setup do
     setup_server(Cracker.Server)
     :ok
   end
 
-  describe "words" do
+  describe "getting the current words" do
     test "when just initialized should be an empty map", do: assert Cracker.words == MapSet.new
     test "should return the current words" do
       Cracker.add_word "pete"
@@ -58,14 +56,21 @@ defmodule FalloutPasswordCrackerTest.CrackerTest do
     end
   end
 
-  describe "guessing" do 
-    setup do: Cracker.set_words ~w[asdfq qwerq uiopa petua petea balua]
+  describe "getting the current clues" do
+    test "when just initialized", do: assert Cracker.clues == %{}
+    test "when some clues have been added" do
+      Cracker.set_words ~w[pete poto]
+      Cracker.add_clue "poto", 2
+      assert Cracker.clues == %{"poto" => 2}
+    end
+  end
 
-    test "with no clues", do: assert Cracker.guess == "petua"
+  describe "guessing" do 
+    setup do: Cracker.set_words ~w[CURIOSITY DIRECTION EVERYTIME GENERATED GOSSIPING SITUATION SUMMONING TRIUMPHED UNLOCKING]
 
     test "with clues" do
-      Cracker.add_clue "asdfq", 1
-      assert Cracker.guess == "qwerq"
+      Cracker.add_clue "SITUATION", 1
+      assert Cracker.guess == "GOSSIPING"
     end
   end
 end

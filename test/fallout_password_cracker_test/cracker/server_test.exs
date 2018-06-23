@@ -46,4 +46,11 @@ defmodule FalloutPasswordCrackerTest.Cracker.ServerTest do
       assert call(context.server, :guess) == "popote"
     end
   end
+
+  test "reseting", context do
+    call(context.server, {:set_words, ~w[popote pepito]})
+    assert call(context.server, :words) == MapSet.new(~w[popote pepito])
+    call(context.server, :reset)
+    assert call(context.server, :words) == MapSet.new
+  end
 end
